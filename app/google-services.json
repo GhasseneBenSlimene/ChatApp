@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768556072190",
+    "project_id": "chatapp-9d5bd",
+    "storage_bucket": "chatapp-9d5bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768556072190:android:84969e64a7dba5cc45b9af",
+        "android_client_info": {
+          "package_name": "com.ghassene.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768556072190-cibva1lnnmp090gsufe2majsee89hsj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB68AEfso1MQ7c0ZHis-XpYPnVG5pCuBwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768556072190-cibva1lnnmp090gsufe2majsee89hsj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
