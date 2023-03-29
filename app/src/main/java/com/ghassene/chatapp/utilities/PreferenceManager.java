@@ -1,4 +1,4 @@
-package com.example.chatapp.utilities;
+package com.ghassene.chatapp.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;

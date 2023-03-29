@@ -1,4 +1,4 @@
-package com.example.chatapp.utilities;
+package com.ghassene.chatapp.utilities;
 
 public class Constants {
     public static final String KEY_COLLECTION_USERS = "users";

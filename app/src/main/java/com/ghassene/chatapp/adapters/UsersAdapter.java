@@ -1,4 +1,4 @@
-package com.example.chatapp.adapters;
+package com.ghassene.chatapp.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chatapp.databinding.ItemContainerUserBinding;
-import com.example.chatapp.models.User;
+import com.ghassene.chatapp.databinding.ItemContainerUserBinding;
+import com.ghassene.chatapp.models.User;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.chatapp.firebase;
+package com.ghassene.chatapp.firebase;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 

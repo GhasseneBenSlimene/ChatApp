@@ -1,4 +1,4 @@
-package com.example.chatapp.activities;
+package com.ghassene.chatapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import com.example.chatapp.databinding.ActivityMainBinding;
-import com.example.chatapp.utilities.PreferenceManager;
-import com.example.chatapp.utilities.Constants;
+import com.ghassene.chatapp.databinding.ActivityMainBinding;
+import com.ghassene.chatapp.utilities.PreferenceManager;
+import com.ghassene.chatapp.utilities.Constants;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;

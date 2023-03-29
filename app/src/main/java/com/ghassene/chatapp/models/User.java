@@ -1,4 +1,4 @@
-package com.example.chatapp.models;
+package com.ghassene.chatapp.models;
 
 import java.io.Serializable;
 

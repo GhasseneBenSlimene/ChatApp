@@ -1,4 +1,4 @@
-package com.example.chatapp.activities;
+package com.ghassene.chatapp.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -15,9 +15,9 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.chatapp.databinding.ActivitySignUpBinding;
-import com.example.chatapp.utilities.Constants;
-import com.example.chatapp.utilities.PreferenceManager;
+import com.ghassene.chatapp.databinding.ActivitySignUpBinding;
+import com.ghassene.chatapp.utilities.Constants;
+import com.ghassene.chatapp.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;

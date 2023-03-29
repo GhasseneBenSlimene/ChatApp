@@ -1,15 +1,15 @@
-package com.example.chatapp.activities;
+package com.ghassene.chatapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.chatapp.adapters.UsersAdapter;
-import com.example.chatapp.databinding.ActivityUsersBinding;
-import com.example.chatapp.models.User;
-import com.example.chatapp.utilities.Constants;
-import com.example.chatapp.utilities.PreferenceManager;
+import com.ghassene.chatapp.adapters.UsersAdapter;
+import com.ghassene.chatapp.databinding.ActivityUsersBinding;
+import com.ghassene.chatapp.models.User;
+import com.ghassene.chatapp.utilities.Constants;
+import com.ghassene.chatapp.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
