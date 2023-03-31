@@ -16,6 +16,7 @@ import com.ghassene.chatapp.utilities.Constants;
 import com.ghassene.chatapp.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -87,6 +88,9 @@ public class ChatActivity extends AppCompatActivity {
             binding.chatRecyclerView.setVisibility(View.VISIBLE);
         }
         binding.progressBar.setVisibility(View.GONE);
+        if(conversationId == null) {
+            checkConversation();
+        }
     };
 
     private Bitmap getBitmapFromEncodedString(String encodedString) {
@@ -113,6 +117,20 @@ public class ChatActivity extends AppCompatActivity {
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP, new Date());
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+        if (conversationId == null) {
+            HashMap<String, Object> conversation = new HashMap<>();
+            conversation.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
+            conversation.put(Constants.KEY_SENDER_NAME, preferenceManager.getString(Constants.KEY_NAME));
+            conversation.put(Constants.KEY_SENDER_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
+            conversation.put(Constants.KEY_RECEIVER_ID, receiverUser.id);
+            conversation.put(Constants.KEY_RECEIVER_NAME, receiverUser.name);
+            conversation.put(Constants.KEY_RECEIVER_IMAGE, receiverUser.image);
+            conversation.put(Constants.KEY_LAST_MESSAGE, binding.inputMessage.getText().toString());
+            conversation.put(Constants.KEY_TIMESTAMP, new Date());
+            addConversion(conversation);
+        } else {
+            updateConversion(binding.inputMessage.getText().toString());
+        }
         binding.inputMessage.setText(null);
     }
 
@@ -128,6 +146,19 @@ public class ChatActivity extends AppCompatActivity {
 
     private String getReadableTime(Date date) {
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
+    }
+
+    private void addConversion(HashMap<String,Object> conversion) {
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .add(conversion)
+                .addOnSuccessListener(documentReference -> conversationId = documentReference.getId());
+    }
+
+    private void updateConversion(String message) {
+        DocumentReference documentReference = database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .document(conversationId);
+        documentReference.update(Constants.KEY_LAST_MESSAGE, message
+                , Constants.KEY_TIMESTAMP, new Date());
     }
 
     private void checkConversation() {
