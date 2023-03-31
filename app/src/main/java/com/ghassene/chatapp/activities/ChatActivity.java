@@ -14,6 +14,7 @@ import com.ghassene.chatapp.models.ChatMessage;
 import com.ghassene.chatapp.models.User;
 import com.ghassene.chatapp.utilities.Constants;
 import com.ghassene.chatapp.utilities.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private PreferenceManager preferenceManager;
     private FirebaseFirestore database;
+    private String conversationId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +50,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void listenMessages() {
-        database.collection(Constants.KEY_MESSAGE)
+        database.collection(Constants.KEY_COLLECTION_CHAT)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, receiverUser.id)
                 .addSnapshotListener(eventListener);
-        database.collection(Constants.KEY_MESSAGE)
+        database.collection(Constants.KEY_COLLECTION_CHAT)
                 .whereEqualTo(Constants.KEY_SENDER_ID, receiverUser.id)
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
@@ -92,14 +94,14 @@ public class ChatActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    private void init(){
+    private void init() {
         preferenceManager = new PreferenceManager(getApplicationContext());
         chatMessages = new ArrayList<>();
         chatAdapter = new ChatAdapter(
                 chatMessages,
                 getBitmapFromEncodedString(receiverUser.image),
                 preferenceManager.getString(Constants.KEY_USER_ID)
-                );
+        );
         binding.chatRecyclerView.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
     }
@@ -110,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
         message.put(Constants.KEY_RECEIVER_ID, receiverUser.id);
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP, new Date());
-        database.collection(Constants.KEY_MESSAGE).add(message);
+        database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
         binding.inputMessage.setText(null);
     }
 
@@ -127,4 +129,25 @@ public class ChatActivity extends AppCompatActivity {
     private String getReadableTime(Date date) {
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
+
+    private void checkConversation() {
+        if (chatMessages.size() != 0) {
+            checkConversationRemotely(preferenceManager.getString(Constants.KEY_USER_ID), receiverUser.id);
+            checkConversationRemotely(receiverUser.id, preferenceManager.getString(Constants.KEY_USER_ID));
+        }
+    }
+
+    private void checkConversationRemotely(String senderId, String receiverId) {
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_SENDER_ID, senderId)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, receiverId)
+                .get()
+                .addOnCompleteListener(conversationListener);
+    }
+
+    private final OnCompleteListener<QuerySnapshot> conversationListener = task -> {
+        if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
+            conversationId = task.getResult().getDocuments().get(0).getId();
+        }
+    };
 }
