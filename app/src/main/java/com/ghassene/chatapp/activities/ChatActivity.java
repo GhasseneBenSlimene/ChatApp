@@ -111,12 +111,28 @@ public class ChatActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     showToast("Notification sent successfully");
+                }else {
+                    // handle error response
+                    switch (response.code()) {
+                        case 401:
+                            // unauthorized error
+                            showToast("Unauthorized");
+                            break;
+                        case 404:
+                            // not found error
+                            showToast("Endpoint not found");
+                            break;
+                        default:
+                            // other errors
+                            showToast("Error: " + response.code());
+                            break;
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                showToast(t.getMessage());
+                showToast("Error: "+t.getMessage());
             }
         });
     }
