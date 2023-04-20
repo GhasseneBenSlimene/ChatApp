@@ -13,4 +13,14 @@
     <string name="select_user">Select User</string>
     <string name="type_a_message">Type a message</string>
     <string name="online">Online</string>
+    <string name="opt_verification">OPT Verification</string>
+    <string name="we_will_send_you_a_one_time_password_on_this_mobile_number">We will send you a one time password on this mobile number</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="_216">+216-</string>
+    <string name="_1234557890">1234557890</string>
+    <string name="get_otp">Get OTP</string>
+    <string name="enter_the_otp_sent_to">Enter the OTP sent to</string>
+    <string name="resent_otp">Resent OTP</string>
+    <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
+    <string name="verify">Verify</string>
 </resources>
