@@ -30,8 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class VerifyOTPActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private EditText[] inputCode= new EditText[6];
-    private String verificationId;
-    private static String name, email, password, image;
+    private String verificationId, name, email, password, image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,12 @@ public class VerifyOTPActivity extends AppCompatActivity {
                 getIntent().getStringExtra("mobile")
         ));
 
-        name = getIntent().getStringExtra(Constants.KEY_NAME);
+        name = preferenceManager.getString(Constants.KEY_NAME);
         email = getIntent().getStringExtra(Constants.KEY_EMAIL);
         password = getIntent().getStringExtra(Constants.KEY_PASSWORD);
         image = getIntent().getStringExtra(Constants.KEY_IMAGE);
 
-        Log.d("verifyR",name);
-        Log.d("verifyR",email);
-        Log.d("verifyR",password);
-        Log.d("verifyR",image);
+        Log.d("TAG", "onCreate: " + name + " " + email + " " + password + " " + image);
 
         inputCode[0] = findViewById(R.id.inputCode1);
         inputCode[1] = findViewById(R.id.inputCode2);
@@ -102,8 +98,6 @@ public class VerifyOTPActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
                                 signUp();
-                                progressBar.setVisibility(View.GONE);
-                                buttonVerify.setVisibility(View.VISIBLE);
                             }else{
                                 progressBar.setVisibility(View.GONE);
                                 buttonVerify.setVisibility(View.VISIBLE);
@@ -161,8 +155,6 @@ public class VerifyOTPActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                     preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
-                    preferenceManager.putString(Constants.KEY_NAME, name);
-                    preferenceManager.putString(Constants.KEY_IMAGE, image);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

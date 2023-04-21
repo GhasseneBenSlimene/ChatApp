@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -71,14 +70,10 @@ public class SendOTPActivity extends AppCompatActivity {
                     });
             Intent intent = new Intent(getApplicationContext(), VerifyOTPActivity.class);
             intent.putExtra("mobile", inputMobile.getText().toString());
-            intent.putExtra(Constants.KEY_NAME, getIntent().getStringExtra(Constants.KEY_NAME));
-            intent.putExtra(Constants.KEY_EMAIL, getIntent().getStringExtra(Constants.KEY_EMAIL));
-            intent.putExtra(Constants.KEY_PASSWORD, getIntent().getStringExtra(Constants.KEY_PASSWORD));
-            intent.putExtra(Constants.KEY_IMAGE, getIntent().getStringExtra(Constants.KEY_IMAGE));
-            Log.d("sendR", getIntent().getStringExtra(Constants.KEY_NAME));
-            Log.d("sendR", getIntent().getStringExtra(Constants.KEY_EMAIL));
-            Log.d("sendR", getIntent().getStringExtra(Constants.KEY_PASSWORD));
-            Log.d("sendR", getIntent().getStringExtra(Constants.KEY_IMAGE));
+//            intent.putExtra(Constants.KEY_NAME, getIntent().getStringExtra(Constants.KEY_NAME));
+//            intent.putExtra(Constants.KEY_EMAIL, getIntent().getStringExtra(Constants.KEY_EMAIL));
+//            intent.putExtra(Constants.KEY_PASSWORD, getIntent().getStringExtra(Constants.KEY_PASSWORD));
+//            intent.putExtra(Constants.KEY_IMAGE, getIntent().getStringExtra(Constants.KEY_IMAGE));
             startActivity(intent);
         });
     }

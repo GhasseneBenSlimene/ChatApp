@@ -29,12 +29,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
     private String encodedImage;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        preferenceManager = new PreferenceManager(getApplicationContext());
         setListeners();
     }
 
@@ -42,11 +44,11 @@ public class SignUpActivity extends AppCompatActivity {
         binding.textSignIn.setOnClickListener(v -> onBackPressed());
         binding.buttonSignUp.setOnClickListener(v -> {
             if (isValidSignUpDetails()) {
+                preferenceManager.putString(Constants.KEY_NAME, binding.inputName.getText().toString());
+                preferenceManager.putString(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
+                preferenceManager.putString(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
+                preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);
                 Intent intent = new Intent(getApplicationContext(), SendOTPActivity.class);
-                intent.putExtra(Constants.KEY_NAME, binding.inputName.getText().toString());
-                intent.putExtra(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
-                intent.putExtra(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
-                intent.putExtra(Constants.KEY_IMAGE, encodedImage);
                 startActivity(intent);
             }
         });
