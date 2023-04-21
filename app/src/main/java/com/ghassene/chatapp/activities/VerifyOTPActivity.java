@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,28 +16,46 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ghassene.chatapp.R;
+import com.ghassene.chatapp.utilities.Constants;
+import com.ghassene.chatapp.utilities.PreferenceManager;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyOTPActivity extends AppCompatActivity {
-
+    private PreferenceManager preferenceManager;
     private EditText[] inputCode= new EditText[6];
     private String verificationId;
+    private static String name, email, password, image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_o_t_p);
+        preferenceManager = new PreferenceManager(getApplicationContext());
 
         TextView textMobile = findViewById(R.id.textMobile);
+
+
         textMobile.setText(String.format(
                 "+216-%s",
                 getIntent().getStringExtra("mobile")
         ));
+
+        name = getIntent().getStringExtra(Constants.KEY_NAME);
+        email = getIntent().getStringExtra(Constants.KEY_EMAIL);
+        password = getIntent().getStringExtra(Constants.KEY_PASSWORD);
+        image = getIntent().getStringExtra(Constants.KEY_IMAGE);
+
+        Log.d("verifyR",name);
+        Log.d("verifyR",email);
+        Log.d("verifyR",password);
+        Log.d("verifyR",image);
 
         inputCode[0] = findViewById(R.id.inputCode1);
         inputCode[1] = findViewById(R.id.inputCode2);
@@ -81,13 +100,13 @@ public class VerifyOTPActivity extends AppCompatActivity {
 
                 FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
                         .addOnCompleteListener(task -> {
-                            progressBar.setVisibility(View.GONE);
-                            buttonVerify.setVisibility(View.VISIBLE);
                             if(task.isSuccessful()){
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                signUp();
+                                progressBar.setVisibility(View.GONE);
+                                buttonVerify.setVisibility(View.VISIBLE);
                             }else{
+                                progressBar.setVisibility(View.GONE);
+                                buttonVerify.setVisibility(View.VISIBLE);
                                 Toast.makeText(VerifyOTPActivity.this, "The verification code entered was invalid", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -128,6 +147,29 @@ public class VerifyOTPActivity extends AppCompatActivity {
 
         );
 
+    }
+
+    private void signUp() {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        HashMap<String, Object> user = new HashMap<>();
+        user.put(Constants.KEY_NAME, name);
+        user.put(Constants.KEY_EMAIL, email);
+        user.put(Constants.KEY_PASSWORD, password);
+        user.put(Constants.KEY_IMAGE, image);
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .add(user)
+                .addOnSuccessListener(documentReference -> {
+                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+                    preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
+                    preferenceManager.putString(Constants.KEY_NAME, name);
+                    preferenceManager.putString(Constants.KEY_IMAGE, image);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void setupOTPInput(int index){

@@ -28,7 +28,6 @@ import java.util.HashMap;
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
-    private PreferenceManager preferenceManager;
     private String encodedImage;
 
     @Override
@@ -36,7 +35,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding= ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        preferenceManager = new PreferenceManager(getApplicationContext());
         setListeners();
     }
 
@@ -44,7 +42,12 @@ public class SignUpActivity extends AppCompatActivity {
         binding.textSignIn.setOnClickListener(v -> onBackPressed());
         binding.buttonSignUp.setOnClickListener(v -> {
             if (isValidSignUpDetails()) {
-                signUp();
+                Intent intent = new Intent(getApplicationContext(), SendOTPActivity.class);
+                intent.putExtra(Constants.KEY_NAME, binding.inputName.getText().toString());
+                intent.putExtra(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
+                intent.putExtra(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
+                intent.putExtra(Constants.KEY_IMAGE, encodedImage);
+                startActivity(intent);
             }
         });
         binding.layoutImage.setOnClickListener(v -> {
@@ -58,30 +61,31 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void signUp() {
-        loading(true);
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        HashMap<String, Object> user = new HashMap<>();
-        user.put(Constants.KEY_NAME, binding.inputName.getText().toString());
-        user.put(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
-        user.put(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
-        user.put(Constants.KEY_IMAGE, encodedImage);
-        database.collection(Constants.KEY_COLLECTION_USERS)
-                .add(user)
-                .addOnSuccessListener(documentReference -> {
-                    loading(false);
-                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
-                    preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
-                    preferenceManager.putString(Constants.KEY_NAME, binding.inputName.getText().toString());
-                    preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);
-                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    loading(false);
-                    showToast(e.getMessage());
-                });
-    }
+//    private void signUp() {
+//        loading(true);
+//        FirebaseFirestore database = FirebaseFirestore.getInstance();
+//        HashMap<String, Object> user = new HashMap<>();
+//        user.put(Constants.KEY_NAME, binding.inputName.getText().toString());
+//        user.put(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
+//        user.put(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
+//        user.put(Constants.KEY_IMAGE, encodedImage);
+//        database.collection(Constants.KEY_COLLECTION_USERS)
+//                .add(user)
+//                .addOnSuccessListener(documentReference -> {
+//                    loading(false);
+//                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+//                    preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
+//                    preferenceManager.putString(Constants.KEY_NAME, binding.inputName.getText().toString());
+//                    preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);
+//                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                })
+//                .addOnFailureListener(e -> {
+//                    loading(false);
+//                    showToast(e.getMessage());
+//                });
+//    }
 
     private String encodeImage(Bitmap bitmap) {
         int previewWidth = 150;
@@ -137,13 +141,13 @@ public class SignUpActivity extends AppCompatActivity {
             return true;
     }
 
-    private void loading(boolean isLoading) {
-        if (isLoading) {
-            binding.buttonSignUp.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.VISIBLE);
-        } else {
-            binding.buttonSignUp.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }
-    }
+//    private void loading(boolean isLoading) {
+//        if (isLoading) {
+//            binding.buttonSignUp.setVisibility(View.INVISIBLE);
+//            binding.progressBar.setVisibility(View.VISIBLE);
+//        } else {
+//            binding.buttonSignUp.setVisibility(View.VISIBLE);
+//            binding.progressBar.setVisibility(View.INVISIBLE);
+//        }
+//    }
 }

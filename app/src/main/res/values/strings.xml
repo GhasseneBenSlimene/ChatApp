@@ -23,4 +23,5 @@
     <string name="resent_otp">Resent OTP</string>
     <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
     <string name="verify">Verify</string>
+    <string name="Continue">Continue</string>
 </resources>
