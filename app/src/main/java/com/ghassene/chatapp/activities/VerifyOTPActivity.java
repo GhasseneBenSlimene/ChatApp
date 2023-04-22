@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class VerifyOTPActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private EditText[] inputCode= new EditText[6];
-    private String verificationId, name, email, password, image;
+    private String verificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +45,6 @@ public class VerifyOTPActivity extends AppCompatActivity {
                 "+216-%s",
                 getIntent().getStringExtra("mobile")
         ));
-
-        name = preferenceManager.getString(Constants.KEY_NAME);
-        email = getIntent().getStringExtra(Constants.KEY_EMAIL);
-        password = getIntent().getStringExtra(Constants.KEY_PASSWORD);
-        image = getIntent().getStringExtra(Constants.KEY_IMAGE);
-
-        Log.d("TAG", "onCreate: " + name + " " + email + " " + password + " " + image);
 
         inputCode[0] = findViewById(R.id.inputCode1);
         inputCode[1] = findViewById(R.id.inputCode2);
@@ -146,10 +139,10 @@ public class VerifyOTPActivity extends AppCompatActivity {
     private void signUp() {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         HashMap<String, Object> user = new HashMap<>();
-        user.put(Constants.KEY_NAME, name);
-        user.put(Constants.KEY_EMAIL, email);
-        user.put(Constants.KEY_PASSWORD, password);
-        user.put(Constants.KEY_IMAGE, image);
+        user.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+        user.put(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL));
+        user.put(Constants.KEY_PASSWORD, preferenceManager.getString(Constants.KEY_PASSWORD));
+        user.put(Constants.KEY_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .add(user)
                 .addOnSuccessListener(documentReference -> {
